@@ -1,0 +1,9 @@
+name: VanillaTpll
+version: 1.0
+main: me.elgamer.vanillatpll.Main
+description: Vanilla Tpll
+
+commands:
+    tpll:
+        usage: /<command> <lat> <lon> [alt]
+        description: Tpll
