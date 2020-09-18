@@ -83,8 +83,9 @@ public class Tpll implements CommandExecutor {
 
 		World world = p.getWorld();
 		l = new Location(p.getWorld(), proj[0], world.getHighestBlockYAt((int) proj[0], (int) proj[1]), proj[1]);
-
-		if (world.getHighestBlockYAt(l) == 0) {
+		l = new Location(p.getWorld(), proj[0], world.getHighestBlockYAt(l), proj[1]);
+		
+		if (l.getY() == 0) {
 			p.sendMessage(ChatColor.RED + "This location is above the void, you may not teleport here!");
 			return true;
 		}
