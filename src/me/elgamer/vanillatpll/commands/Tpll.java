@@ -64,18 +64,33 @@ public class Tpll implements CommandExecutor {
 		} catch(Exception e) {
 			return false;
 		}
+		
+		if (lat>90 || lat<-90) {
+			p.sendMessage(ChatColor.RED + "Latitude is out of bounds, keep it between -90 and 90");
+			return true;
+		}
+		
+		if (lon>180 || lon<-180) {
+			p.sendMessage(ChatColor.RED + "Longitude is out of bounds, keep it between -180 and 180");
+			return true;
+		}
 
 		ModifiedAirocean projection = new ModifiedAirocean();
 
 		double proj[] = projection.fromGeo(lon, lat);
-		p.sendMessage("x: " + proj[0] + " | z: " + proj[1]);
 
 		Location l;
 
 		World world = p.getWorld();
 		l = new Location(p.getWorld(), proj[0], world.getHighestBlockYAt((int) proj[0], (int) proj[1]), proj[1]);
 
+		if (world.getHighestBlockYAt(l) == 0) {
+			p.sendMessage(ChatColor.RED + "This location is above the void, you may not teleport here!");
+			return true;
+		}
+		
 		p.teleport(l);
+		p.sendMessage("Teleported " + p.getName() + " to " + l.getX() + ", " + l.getY() + ", " + l.getZ());
 
 		return true;
 	}
