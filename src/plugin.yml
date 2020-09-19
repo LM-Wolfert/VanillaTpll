@@ -5,5 +5,5 @@ description: Vanilla Tpll
 
 commands:
     tpll:
-        usage: /<command> <lat> <lon> [alt]
+        usage: /<command> <lat> <lon>
         description: Tpll

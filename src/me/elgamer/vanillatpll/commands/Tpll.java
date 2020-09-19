@@ -2,13 +2,13 @@ package me.elgamer.vanillatpll.commands;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import me.elgamer.vanillatpll.projections.ModifiedAirocean;
+import me.elgamer.vanillatpll.utils.LocationUtil;
 
 public class Tpll implements CommandExecutor {
 
@@ -34,13 +34,9 @@ public class Tpll implements CommandExecutor {
 		}
 
 		String[] splitCoords = args[0].split(",");
-		String alt = null;
 
 		if(splitCoords.length==2&&args.length<3) { // lat and long in single arg
-			if(args.length>1) alt = args[1];
 			args = splitCoords;
-		} else if(args.length==3) {
-			alt = args[2];
 		}
 
 		if(args[0].endsWith(",")) {
@@ -60,7 +56,6 @@ public class Tpll implements CommandExecutor {
 		try {
 			lat = Double.parseDouble(args[0]);
 			lon = Double.parseDouble(args[1]);
-			if(alt!=null) alt = Double.toString(Double.parseDouble(alt));
 		} catch(Exception e) {
 			return false;
 		}
@@ -79,21 +74,31 @@ public class Tpll implements CommandExecutor {
 
 		double proj[] = projection.fromGeo(lon, lat);
 
-		Location l;
-
-		World world = p.getWorld();
-		l = new Location(p.getWorld(), proj[0], world.getHighestBlockYAt((int) proj[0], (int) proj[1]), proj[1]);
-		l = new Location(p.getWorld(), proj[0], world.getHighestBlockYAt(l), proj[1]);
+		Location loc = null;
 		
-		if (l.getY() == 0) {
+		final float pitch = p.getLocation().getPitch();
+        final float yaw = p.getLocation().getYaw();
+
+		try {
+			loc = LocationUtil.getSafeDestination(new Location(p.getWorld(), proj[0], p.getWorld().getMaxHeight(), proj[1]));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		loc = new Location(p.getWorld(), proj[0], loc.getY(), proj[1], yaw, pitch);
+		
+		if (loc.getY() == 0) {
 			p.sendMessage(ChatColor.RED + "This location is above the void, you may not teleport here!");
 			return true;
 		}
-		
-		p.teleport(l);
-		p.sendMessage("Teleported " + p.getName() + " to " + l.getX() + ", " + l.getY() + ", " + l.getZ());
+
+		p.teleport(loc);
+		p.sendMessage("Teleported " + p.getName() + " to " + loc.getX() + ", " + loc.getY() + ", " + loc.getZ());
 
 		return true;
 	}
+	
+	
 
 }
