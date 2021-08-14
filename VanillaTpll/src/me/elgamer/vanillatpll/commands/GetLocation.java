@@ -17,7 +17,7 @@ public class GetLocation implements CommandExecutor {
 
 		//Check is command sender is a player
 		if (!(sender instanceof Player)) {
-			sender.sendMessage("&cYou cannot add a player to a region!");
+			sender.sendMessage(ChatColor.RED + "Only players can do this!");
 			return true;
 		}
 
@@ -41,7 +41,7 @@ public class GetLocation implements CommandExecutor {
 		String lat = df.format(proj[1]);
 		String lon = df.format(proj[0]);
 		p.sendMessage(ChatColor.GRAY + "Your coordinates are " + lat + "," + lon);
-		p.sendMessage(ChatColor.GRAY + "https://www.google.com/maps/@" + lat + "," + lon + ",80m/data=!3m1!1e3");
+		p.sendMessage(ChatColor.GRAY + "http://maps.google.com/maps?t=k&q=loc:" + lat + "+" + lon);
 		
 		return true;
 	}
