@@ -1,0 +1,14 @@
+name: VanillaTpll
+version: 2.0
+main: me.elgamer.vanillatpll.Main
+description: Vanilla Tpll
+api-version: 1.13
+
+commands:
+  tpll:
+    usage: /<command> <lat> <lon>
+    description: Tpll
+  ll:
+    aliases: [ location, coordinates, co ]
+    usage: /<command>
+    description: Get coordinates of player.

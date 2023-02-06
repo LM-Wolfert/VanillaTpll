@@ -1,0 +1,6 @@
+#Is permission required to use /tpll, true/false.
+permission_required: true
+
+#World height
+min_y: 0
+max_y: 256
