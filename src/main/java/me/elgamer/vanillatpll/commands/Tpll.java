@@ -156,11 +156,13 @@ public class Tpll implements CommandExecutor {
             return true;
         }
 
-        int alt = Utils.getHighestYAt(p.getWorld(), (int) proj[0], (int) proj[1]);
+        //If altitude wasn't specified in the command.
         CompletableFuture<Double> altFuture;
+        if (Double.isNaN(altitude)) {
 
-        if (alt == Integer.MIN_VALUE) {
-            if (Double.isNaN(altitude)) {
+            int alt = Utils.getHighestYAt(p.getWorld(), (int) proj[0], (int) proj[1]);
+
+            if (alt == Integer.MIN_VALUE) {
                 try {
                     altFuture = bteGeneratorSettings.datasets()
                             .<IScalarDataset>getCustom(EarthGeneratorPipelines.KEY_DATASET_HEIGHTS)
@@ -171,10 +173,10 @@ public class Tpll implements CommandExecutor {
                     return true;
                 }
             } else {
-                altFuture = CompletableFuture.completedFuture(altitude);
+                altFuture = CompletableFuture.supplyAsync(() -> (double) alt);
             }
         } else {
-            altFuture = CompletableFuture.supplyAsync(() -> (double) alt);
+            altFuture = CompletableFuture.completedFuture(altitude);
         }
 
         LatLng finalDefaultCoords = defaultCoords;
